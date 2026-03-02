@@ -29,4 +29,9 @@ test.describe('Проверка на странице логина', () => {
     await loginPage.checkErrorState();
     await loginPage.checkErrorMessage('Epic sadface: Username is required');
   });
+
+  test('Проверка успешной авторизации сломанного пользователя', async ({ page }) => {
+    await loginPage.login(users.error_user);
+    await expect(page.getByText('Swag Labs')).toBeVisible;
+  });
 });
