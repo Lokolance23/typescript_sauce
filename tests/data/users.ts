@@ -28,4 +28,16 @@ export const users = {
     username: 'visual_user',
     password: 'secret_sauce',
   },
+  invalid_user: {
+    username: '11231',
+    password: '144121',
+  },
+  user_without_password: {
+    username: 'standard_user',
+    password: '',
+  },
+  user_without_username: {
+    username: '',
+    password: '123',
+  },
 };

@@ -34,4 +34,24 @@ test.describe('Проверка на странице логина', () => {
     await loginPage.login(users.error_user);
     await expect(page.getByText('Swag Labs')).toBeVisible;
   });
+
+  test('Проверка авторизации с неправильными данными', async ({ page }) => {
+    await loginPage.login(users.invalid_user);
+    await loginPage.checkErrorState();
+    await loginPage.checkErrorMessage(
+      'Epic sadface: Username and password do not match any user in this service',
+    );
+  });
+
+  test('Проверка авторизации без ввода password', async ({ page }) => {
+    await loginPage.login(users.user_without_password);
+    await loginPage.checkErrorState();
+    await loginPage.checkErrorMessage('Epic sadface: Password is required');
+  });
+
+  test('Проверка авторизации без ввода username', async ({ page }) => {
+    await loginPage.login(users.user_without_username);
+    await loginPage.checkErrorState();
+    await loginPage.checkErrorMessage('Epic sadface: Username is required');
+  });
 });
