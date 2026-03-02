@@ -15,13 +15,18 @@ test.describe('Проверка на странице логина', () => {
 
   test('Проверка успешной авторизации', async ({ page }) => {
     await loginPage.login(users.standard);
+    await expect(page.getByText('Swag Labs')).toBeVisible;
   });
 
   test('Проверка неуспешной авторизации', async ({ page }) => {
     await loginPage.login(users.locked);
-    await expect(loginPage.errorMessage).toBeVisible();
-    await expect(loginPage.errorPasswordMark).toBeVisible();
-    await expect(loginPage.errorUsernameMark).toBeVisible();
-    await expect(loginPage.errorCloseButton).toBeVisible();
+    await loginPage.checkErrorState();
+    await loginPage.checkErrorMessage('Epic sadface: Sorry, this user has been locked out.');
+  });
+
+  test('Проверка авторизации пустых полей', async ({ page }) => {
+    await loginPage.submitButton.click();
+    await loginPage.checkErrorState();
+    await loginPage.checkErrorMessage('Epic sadface: Username is required');
   });
 });

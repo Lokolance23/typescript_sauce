@@ -31,10 +31,6 @@ export class LoginPage {
     return this.page.locator('[data-test="error-button"]');
   }
 
-  get errorField(): Locator {
-    return this.page.locator('div').filter({ hasText: /^Epic sadface: Username is required$/ });
-  }
-
   get errorUsernameMark(): Locator {
     return this.page.locator('path').first();
   }
@@ -57,5 +53,16 @@ export class LoginPage {
     await expect(this.emailInput).toBeVisible();
     await expect(this.passwordInput).toBeVisible();
     await expect(this.submitButton).toBeVisible();
+  }
+
+  async checkErrorState() {
+    await expect(this.errorMessage).toBeVisible();
+    await expect(this.errorCloseButton).toBeVisible();
+    await expect(this.errorUsernameMark).toBeVisible();
+    await expect(this.errorPasswordMark).toBeVisible();
+  }
+
+  async checkErrorMessage(errorMessage: string) {
+    await expect(this.errorMessage).toHaveText(errorMessage);
   }
 }

@@ -16,8 +16,16 @@ export const users = {
     username: 'problem_user',
     password: 'secret_sauce',
   },
-  performance: {
+  performance_glitch: {
     username: 'performance_glitch_user',
+    password: 'secret_sauce',
+  },
+  error_user: {
+    username: 'error_user',
+    password: 'secret_sauce',
+  },
+  visual_user: {
+    username: 'visual_user',
     password: 'secret_sauce',
   },
 };
