@@ -1,12 +1,15 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { FooterComponent } from '../components/footerComponent';
+import { HeaderComponent } from '../components/headerComponent';
 
 export class InventoryPage {
   page: Page;
   footer: FooterComponent;
+  header: HeaderComponent;
   constructor(page: Page) {
     this.page = page;
     this.footer = new FooterComponent(page);
+    this.header = new HeaderComponent(page);
   }
 
   get nameTitle(): Locator {
@@ -17,18 +20,41 @@ export class InventoryPage {
     return this.page.locator('[data-test="product-sort-container"]');
   }
 
-  get catalogList(): Locator {
+  get itemsList(): Locator {
     return this.page.locator('[data-test="inventory-container"]');
   }
 
-  get firstItem(): Locator {
-    return this.page.locator('[data-test="item-5-title-link"]');
+  get inventoryItems(): Locator {
+    return this.page.locator('[data-test="inventory-item"]');
+  }
+
+  item(index: number): Locator {
+    return this.inventoryItems.nth(index);
+  }
+
+  itemName(index: number): Locator {
+    return this.item(index).locator('[data-test="inventory-item-name"]');
+  }
+
+  itemPrice(index: number): Locator {
+    return this.item(index).locator('[data-test="inventory-item-price"]');
+  }
+  itemDescription(index: number): Locator {
+    return this.item(index).locator('[data-test="inventory-item-desc"]');
+  }
+
+  itemAddCart(index: number): Locator {
+    return this.item(index).locator('[data-test^="add-to-cart"]');
+  }
+
+  itemRemoveCart(index: number): Locator {
+    return this.item(index).locator('[data-test^="remove"]');
   }
 
   async inventoryPageVisible() {
     await expect(this.nameTitle).toBeVisible();
     await expect(this.sortButton).toBeVisible();
-    await expect(this.catalogList).toBeVisible();
+    await expect(this.itemsList).toBeVisible();
   }
 
   async openInventoryPage() {
@@ -59,5 +85,11 @@ export class InventoryPage {
     return priceTexts.map((p) => parseFloat(p.replace('$', '')));
   }
 
-  async sortItemsAsc() {}
+  async addToCart(index: number) {
+    await this.itemAddCart(index).click();
+  }
+
+  async removeFromCart(index: number) {
+    await this.itemRemoveCart(index).click();
+  }
 }

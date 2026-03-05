@@ -36,6 +36,17 @@ test.describe('Проверка основной страницы товаров
     await inventoryPage.sortLowToHigh();
     const actualPrice = await inventoryPage.getItemPrices();
     const sortedPrice = actualPrice.toSorted((a, b) => a - b);
-    expect(actualPrice).toEqual(sortedPrice);
+    await expect(actualPrice).toEqual(sortedPrice);
+  });
+
+  test('Проверка добавления товара в корзину', async () => {
+    await inventoryPage.addToCart(0);
+    await inventoryPage.header.checkCartItems('1');
+  });
+
+  test('Проверка удаления товара из корзины', async () => {
+    await inventoryPage.addToCart(0);
+    await inventoryPage.removeFromCart(0);
+    await expect(inventoryPage.header.headerButtonCart).toHaveText('');
   });
 });

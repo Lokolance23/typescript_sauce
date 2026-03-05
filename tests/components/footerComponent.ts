@@ -8,50 +8,39 @@ interface Elements {
 
 export class FooterComponent {
   readonly page: Page;
-  readonly elementsFooter: Elements[];
 
   constructor(page: Page) {
     this.page = page;
-    this.elementsFooter = [
-      {
-        locator: (page: Page) => page.locator('[data-test="footer"]'),
-        name: 'Footer',
-      },
-      {
-        locator: (page: Page) => page.locator('[data-test="social-twitter"]'),
-        name: 'Twitter link',
-      },
-      {
-        locator: (page: Page) => page.locator('[data-test="social-facebook"]'),
-        name: 'Facebook link',
-      },
-      {
-        locator: (page: Page) => page.locator('[data-test="social-linkedin"]'),
-        name: 'Twitter link',
-      },
-      {
-        locator: (page: Page) => page.locator('[data-test="footer-copy"]'),
-        name: 'Footer text',
-        text: '© 2026 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy',
-      },
-    ];
+  }
+
+  get footerArea(): Locator {
+    return this.page.locator('[data-test="footer"]');
+  }
+  get footerTwitterLink(): Locator {
+    return this.page.locator('[data-test="social-twitter"]');
+  }
+  get footerFacebookLink(): Locator {
+    return this.page.locator('[data-test="social-facebook"]');
+  }
+
+  get footerLinkedinLink(): Locator {
+    return this.page.locator('[data-test="social-linkedin"]');
+  }
+  get footerCopyrightText(): Locator {
+    return this.page.locator('[data-test="footer-copy"]');
   }
 
   async checkFooterVisible() {
-    for (const { locator, name } of this.elementsFooter) {
-      await test.step(`Проверка ${name}`, async () => {
-        await expect(locator(this.page)).toBeVisible();
-      });
-    }
+    await expect(this.footerArea).toBeVisible();
+    await expect(this.footerTwitterLink).toBeVisible();
+    await expect(this.footerFacebookLink).toBeVisible();
+    await expect(this.footerLinkedinLink).toBeVisible();
+    await expect(this.footerCopyrightText).toBeVisible();
   }
 
   async checkNameFooter() {
-    for (const { locator, name, text } of this.elementsFooter) {
-      if (text) {
-        await test.step(`Проверка названия элемента ${name}`, async () => {
-          await expect(locator(this.page)).toContainText(text);
-        });
-      }
-    }
+    const expectedText =
+      '© 2026 Sauce Labs. All Rights Reserved. Terms of Service | Privacy Policy';
+    await expect(this.footerCopyrightText).toContainText(expectedText);
   }
 }
