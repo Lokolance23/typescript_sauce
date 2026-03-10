@@ -47,6 +47,6 @@ test.describe('Проверка основной страницы товаров
   test('Проверка удаления товара из корзины', async () => {
     await inventoryPage.addToCart(0);
     await inventoryPage.removeFromCart(0);
-    await inventoryPage.header.checkCartItems('3');
+    await inventoryPage.header.checkCartItems('');
   });
 });
