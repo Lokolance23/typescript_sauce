@@ -49,7 +49,7 @@ test.describe('Проверка на странице логина', () => {
     await loginPage.checkErrorMessage('Epic sadface: Password is required');
   });
 
-  test('Проверка авторизации без ввода username', async ({ page }) => {
+  test('Проверка авторизации без ввода username', { tag: '@smoke' }, async ({ page }) => {
     await loginPage.login(users.user_without_username);
     await loginPage.checkErrorState();
     await loginPage.checkErrorMessage('Epic sadface: Username is required');
