@@ -33,6 +33,10 @@ export class HeaderComponent {
   }
 
   async checkCartItems(quantityItems: string) {
-    await expect(this.headerCartQuantity).toHaveText(quantityItems);
+    if (quantityItems === '') {
+      await expect(this.headerCartQuantity).toBeHidden();
+    } else {
+      await expect(this.headerCartQuantity).toHaveText(quantityItems);
+    }
   }
 }
