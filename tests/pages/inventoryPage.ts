@@ -1,15 +1,18 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { FooterComponent } from '../components/footerComponent';
 import { HeaderComponent } from '../components/headerComponent';
+import { NavBarComponent } from '../components/navBarComponent';
 
 export class InventoryPage {
   page: Page;
   footer: FooterComponent;
   header: HeaderComponent;
+  navbar: NavBarComponent;
   constructor(page: Page) {
     this.page = page;
     this.footer = new FooterComponent(page);
     this.header = new HeaderComponent(page);
+    this.navbar = new NavBarComponent(page);
   }
 
   get nameTitle(): Locator {
@@ -91,5 +94,9 @@ export class InventoryPage {
 
   async removeFromCart(index: number) {
     await this.itemRemoveCart(index).click();
+  }
+
+  async openItem(index: number) {
+    await this.itemName(index).click();
   }
 }

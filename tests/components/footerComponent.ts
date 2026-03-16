@@ -1,10 +1,4 @@
-import test, { expect, Locator, Page } from '@playwright/test';
-
-interface Elements {
-  locator: (page: Page) => Locator;
-  name: string;
-  text?: string;
-}
+import { expect, Locator, Page } from '@playwright/test';
 
 export class FooterComponent {
   readonly page: Page;

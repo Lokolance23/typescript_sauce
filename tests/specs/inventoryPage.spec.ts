@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { InventoryPage } from '../pages/inventoryPage';
+import { LoginPage } from '../pages/loginPage';
 
 test.describe('Проверка основной страницы товаров', async () => {
   let inventoryPage: InventoryPage;
@@ -48,5 +49,44 @@ test.describe('Проверка основной страницы товаров
     await inventoryPage.addToCart(0);
     await inventoryPage.removeFromCart(0);
     await inventoryPage.header.checkCartItems('');
+  });
+
+  test('Проверка открытия навигации', async () => {
+    await inventoryPage.header.openMenu();
+    await inventoryPage.navbar.openNavBar();
+  });
+
+  test('Проверка закрытия навигации', async () => {
+    await inventoryPage.header.openMenu();
+    await inventoryPage.navbar.openNavBar();
+    await inventoryPage.navbar.closeNavBar();
+  });
+
+  test('Проверка перехода в информацию о продукте', async ({ page }) => {
+    await inventoryPage.header.openMenu();
+    await inventoryPage.navbar.clickAbout();
+    await expect(page).toHaveURL(/.*saucelabs\.com.*/);
+  });
+
+  test('Проверка выхода из профиля', async ({ page }) => {
+    await inventoryPage.header.openMenu();
+    await inventoryPage.navbar.logout();
+    const loginPage = new LoginPage(page);
+    loginPage.waitLoginVisible();
+  });
+
+  test('Проверка сброса состояния страницы', async () => {
+    await inventoryPage.addToCart(0);
+    await inventoryPage.header.checkCartItems('1');
+    await inventoryPage.header.openMenu();
+    await inventoryPage.navbar.resetState();
+    await inventoryPage.header.checkCartItems('');
+  });
+
+  test('Переход на страницу товара', async ({ page }) => {
+    await inventoryPage.openItem(1);
+    await expect(page.locator('[data-test="inventory-item-name"]')).toHaveText(
+      'Sauce Labs Bike Light',
+    );
   });
 });

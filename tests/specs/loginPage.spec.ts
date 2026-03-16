@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage';
+import { InventoryPage } from '../pages/inventoryPage';
 import { users } from '../data/users';
 
 test.describe('Проверка на странице логина', () => {
@@ -15,7 +16,8 @@ test.describe('Проверка на странице логина', () => {
 
   test('Проверка успешной авторизации', async ({ page }) => {
     await loginPage.login(users.standard);
-    await expect(page.getByText('Swag Labs')).toBeVisible;
+    const invetoryPage = new InventoryPage(page);
+    await invetoryPage.inventoryPageVisible();
   });
 
   test('Проверка неуспешной авторизации', async ({ page }) => {
@@ -32,7 +34,8 @@ test.describe('Проверка на странице логина', () => {
 
   test('Проверка успешной авторизации сломанного пользователя', async ({ page }) => {
     await loginPage.login(users.error_user);
-    await expect(page.getByText('Swag Labs')).toBeVisible;
+    const invetoryPage = new InventoryPage(page);
+    await invetoryPage.inventoryPageVisible();
   });
 
   test('Проверка авторизации с неправильными данными', async ({ page }) => {
@@ -49,7 +52,7 @@ test.describe('Проверка на странице логина', () => {
     await loginPage.checkErrorMessage('Epic sadface: Password is required');
   });
 
-  test('Проверка авторизации без ввода username', async ({ page }) => {
+  test('Проверка авторизации без ввода username', { tag: '@smoke' }, async ({ page }) => {
     await loginPage.login(users.user_without_username);
     await loginPage.checkErrorState();
     await loginPage.checkErrorMessage('Epic sadface: Username is required');
