@@ -17,7 +17,7 @@ test.describe('Проверка основной страницы товаров
     await inventoryPage.sortAtoZ();
     const actualNames = await inventoryPage.getItemNames();
     const sortedNames = [...actualNames].sort((a, b) => a.localeCompare(b));
-    expect(actualNames).toEqual(sortedNames);
+    await expect(actualNames).toEqual(sortedNames);
   });
   test('Проверка сортировки Z-A', async () => {
     await inventoryPage.sortZtoA();
@@ -25,13 +25,13 @@ test.describe('Проверка основной страницы товаров
     const sortedAsc = [...actualNames].sort((a, b) => a.localeCompare(b));
     const sortedDesc = sortedAsc.reverse();
 
-    expect(actualNames).toEqual(sortedDesc);
+    await expect(actualNames).toEqual(sortedDesc);
   });
   test('Проверка сортировки Low-High', async () => {
     await inventoryPage.sortLowToHigh();
     const actualPrice = await inventoryPage.getItemPrices();
     const sortedPrice = actualPrice.toSorted((a, b) => a - b);
-    expect(actualPrice).toEqual(sortedPrice);
+    await expect(actualPrice).toEqual(sortedPrice);
   });
   test('Проверка сортировки high-low', async () => {
     await inventoryPage.sortLowToHigh();
@@ -72,7 +72,7 @@ test.describe('Проверка основной страницы товаров
     await inventoryPage.header.openMenu();
     await inventoryPage.navbar.logout();
     const loginPage = new LoginPage(page);
-    loginPage.waitLoginVisible();
+    await loginPage.waitLoginVisible();
   });
 
   test('Проверка сброса состояния страницы', async () => {
