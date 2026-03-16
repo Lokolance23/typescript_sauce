@@ -52,15 +52,18 @@ test.describe('Проверка основной страницы товаров
   });
 
   test('Проверка открытия навигации', async () => {
+    await inventoryPage.header.openMenu();
     await inventoryPage.navbar.openNavBar();
   });
 
   test('Проверка закрытия навигации', async () => {
+    await inventoryPage.header.openMenu();
     await inventoryPage.navbar.openNavBar();
     await inventoryPage.navbar.closeNavBar();
   });
 
   test('Проверка перехода в информацию о продукте', async ({ page }) => {
+    await inventoryPage.header.openMenu();
     await inventoryPage.navbar.clickAbout();
     await expect(page).toHaveURL(/.*saucelabs\.com.*/);
   });
