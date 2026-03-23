@@ -17,14 +17,32 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-        # Пример запуска только smoke-тестов в PR
       - name: Run smoke tests
         if: github.event_name == 'pull_request'
         run: npx playwright test --grep @smoke
       - name: Run Playwright tests
+        if: github.event_name != 'pull_request'
         run: npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+      - name: Generate Allure Report
+        if: always()
+        run: |
+          npx allure generate ./allure-results --clean -o ./allure-report
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 30
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
