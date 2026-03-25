@@ -22,6 +22,8 @@ jobs:
       - name: Run Playwright tests
         if: github.event_name == 'pull_request'
         run: npx playwright test
+        env:
+          ALLURE_RESULTS_PATH: ./allure-results
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
