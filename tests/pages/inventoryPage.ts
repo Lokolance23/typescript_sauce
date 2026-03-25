@@ -2,14 +2,14 @@ import { Page, Locator, expect } from '@playwright/test';
 import { FooterComponent } from '../components/footerComponent';
 import { HeaderComponent } from '../components/headerComponent';
 import { NavBarComponent } from '../components/navBarComponent';
+import { BasePage } from './basePage';
 
-export class InventoryPage {
-  page: Page;
+export class InventoryPage extends BasePage {
   footer: FooterComponent;
   header: HeaderComponent;
   navbar: NavBarComponent;
   constructor(page: Page) {
-    this.page = page;
+    super(page);
     this.footer = new FooterComponent(page);
     this.header = new HeaderComponent(page);
     this.navbar = new NavBarComponent(page);
@@ -54,15 +54,9 @@ export class InventoryPage {
     return this.item(index).locator('[data-test^="remove"]');
   }
 
-  async inventoryPageVisible() {
-    await expect(this.nameTitle).toBeVisible();
-    await expect(this.sortButton).toBeVisible();
-    await expect(this.itemsList).toBeVisible();
-  }
-
   async openInventoryPage() {
-    await this.page.goto('https://www.saucedemo.com/inventory.html');
-    await this.inventoryPageVisible();
+    await this.navigate('https://www.saucedemo.com/inventory.html');
+    await this.waitForPageLoad();
   }
   async sortAtoZ() {
     await this.page.locator('[data-test="product-sort-container"]').selectOption('az');
@@ -77,11 +71,11 @@ export class InventoryPage {
     await this.page.locator('[data-test="product-sort-container"]').selectOption('hilo');
   }
 
-  async getItemNames(): Promise<string[]> {
+  async getItemNames() {
     return await this.page.locator('[data-test="inventory-item-name"]').allTextContents();
   }
 
-  async getItemPrices(): Promise<number[]> {
+  async getItemPrices() {
     const priceTexts = await this.page
       .locator('[data-test="inventory-item-price"]')
       .allTextContents();

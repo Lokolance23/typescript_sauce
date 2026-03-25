@@ -1,14 +1,15 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { IUser } from '../data/users';
+import { BasePage } from './basePage';
 
-export class LoginPage {
-  page: Page;
+export class LoginPage extends BasePage {
   constructor(page: Page) {
-    this.page = page;
+    super(page);
   }
 
   async openLoginPage() {
-    await this.page.goto('https://www.saucedemo.com/');
+    await this.navigate('https://www.saucedemo.com/');
+    await this.waitForPageLoad();
   }
 
   get emailInput(): Locator {
@@ -44,25 +45,25 @@ export class LoginPage {
   }
 
   async login(user: IUser) {
-    await this.emailInput.fill(user.username);
-    await this.passwordInput.fill(user.password);
-    await this.submitButton.click();
+    await this.fill(this.emailInput, user.username);
+    await this.fill(this.passwordInput, user.password);
+    await this.click(this.submitButton);
   }
 
   async waitLoginVisible() {
-    await expect(this.emailInput).toBeVisible();
-    await expect(this.passwordInput).toBeVisible();
-    await expect(this.submitButton).toBeVisible();
+    await this.waitForElement(this.emailInput);
+    await this.waitForElement(this.passwordInput);
+    await this.waitForElement(this.submitButton);
   }
 
   async checkErrorState() {
-    await expect(this.errorMessage).toBeVisible();
-    await expect(this.errorCloseButton).toBeVisible();
-    await expect(this.errorUsernameMark).toBeVisible();
-    await expect(this.errorPasswordMark).toBeVisible();
+    await this.waitForElement(this.errorMessage);
+    await this.waitForElement(this.errorCloseButton);
+    await this.waitForElement(this.errorUsernameMark);
+    await this.waitForElement(this.errorPasswordMark);
   }
 
   async checkErrorMessage(errorMessage: string) {
-    await expect(this.errorMessage).toHaveText(errorMessage);
+    await this.waitForText(this.errorMessage, errorMessage);
   }
 }

@@ -17,7 +17,7 @@ test.describe('Проверка на странице логина', () => {
   test('Проверка успешной авторизации', async ({ page }) => {
     await loginPage.login(users.standard);
     const invetoryPage = new InventoryPage(page);
-    await invetoryPage.inventoryPageVisible();
+    await invetoryPage.waitForPageLoad();
   });
 
   test('Проверка неуспешной авторизации', async ({ page }) => {
@@ -35,7 +35,7 @@ test.describe('Проверка на странице логина', () => {
   test('Проверка успешной авторизации сломанного пользователя', async ({ page }) => {
     await loginPage.login(users.error_user);
     const invetoryPage = new InventoryPage(page);
-    await invetoryPage.inventoryPageVisible();
+    await invetoryPage.waitForPageLoad();
   });
 
   test('Проверка авторизации с неправильными данными', async ({ page }) => {
